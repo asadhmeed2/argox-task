@@ -1,0 +1,22 @@
+.paginate-container{
+    display: flex;
+    list-style: none;
+    gap: 0.5em;
+    padding:0;
+    align-self: center;
+}
+.paginate-page{
+    cursor: pointer;
+    border: 1px solid #333;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    border-radius:60px
+}
+
+.paginate-page:hover{
+    background: #5e7fc3;
+}
+.paginate-page-active{
+    border-radius: 5px;
+    background-color: #5e7fc3;
+    color: red;
+}

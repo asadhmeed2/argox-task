@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import {AppContainer} from './app.syle'
+import Tabe from './components/tabes/tab';
 
+const corpIds = ["1","2","3"] 
+const getCategory =(corpId)=>{
+  switch(corpId){
+    case "1": 
+      return "fruits"
+    case "2": 
+      return "greens"
+    case "3": 
+      return "leaves"
+    default:
+      return "unknown"
+    }
+
+}
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContainer className="App">
+      {corpIds.map(corpId => <Tabe key={corpId} cropTypeId={corpId} catagory ={getCategory(corpId)}/>)}
+    </AppContainer>
   );
 }
 
