@@ -5,7 +5,8 @@ function ListItem(props) {
     const {price, name} =props;
   return (
     <ListItemContainer>
-        <ListItemPrice>{price}</ListItemPrice>
+        <ListItemPrice>מחיר {parseFloat(price).toFixed(3)}ש"ח</ListItemPrice>
+        <span>:</span>
         <ListItemName>{name}</ListItemName>
     </ListItemContainer>
   )
