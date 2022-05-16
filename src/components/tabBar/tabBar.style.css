@@ -1,0 +1,10 @@
+.tabBarLink{
+    text-decoration:none;
+    color: rgb(61, 50, 50);
+    padding-left:2px;
+}
+
+.tabBarLink:hover{
+    text-decoration:underline;
+    
+}

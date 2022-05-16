@@ -15,8 +15,7 @@ const UseData = (url)=>{
                 setData(data?.data);
                 setHaseMore(data?.data.length > 0);
                 setLoading(false);
-            }catch(e){  
-                console.log(e);
+            }catch(err){  
                 setError(true)
             }
         }

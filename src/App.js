@@ -1,5 +1,7 @@
+import { Route, Routes, BrowserRouter as Router  } from 'react-router-dom';
 import {AppContainer} from './app.syle'
-import Tabe from './components/tabes/tab';
+import TabBar from './components/tabBar/tabBar';
+import Tab from './components/tabes/tab';
 
 const corpIds = ["1","2","3"] 
 const getCategory =(corpId)=>{
@@ -13,12 +15,18 @@ const getCategory =(corpId)=>{
     default:
       return "unknown"
     }
-
 }
+const catagories = corpIds.map(corpId=>getCategory(corpId));
+
 function App() {
   return (
     <AppContainer className="App">
-      {corpIds.map(corpId => <Tabe key={corpId} cropTypeId={corpId} catagory ={getCategory(corpId)}/>)}
+        <Router>
+          <TabBar catagories={catagories}/>
+            <Routes>
+              {corpIds.map((corpId) =><Route key={corpId} path={getCategory(corpId)} element={<Tab key={corpId} cropTypeId={corpId} catagory ={getCategory(corpId)}/>}></Route>)}
+            </Routes>
+        </Router>
     </AppContainer>
   );
 }
