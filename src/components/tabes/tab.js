@@ -14,10 +14,10 @@ const Tabe=(props) => {
     const [firstItemNumber,setFirstItemNumber] =useState(0);
     const [data,setData] = useState([])
     const [haseMore,setHaseMore] = useState(true)
-    const [maxItems,setMaxItems] = useState(0);
     const pageNumberRef = useRef();
-    const haseMoreRef = useRef();
+    const haseMoreRef = useRef(true);
     const maxItemsRef = useRef([]);
+    const firstItemNumberRef = useRef(0);
 
       useMemo(()=>{
       const getData = async ()=>{
@@ -25,18 +25,19 @@ const Tabe=(props) => {
           console.log(pageNumber);
           const resData = await (await fetch(`https://apiproxy.agrox.io/api/crops/GetDataForTradeScene?cropTypeId=${cropTypeId}&pageNumber=${pageNumber}`)).json();
           console.log("resData in memo" ,resData.data.length);
-          if(resData.data.length){
+          if(resData.data.length > 0){
             pageNumberRef.current =pageNumber+1;
             setData(prev => [...prev,...resData.data])
             maxItemsRef.current=[...maxItemsRef.current,...resData.data]
           }else{
+            haseMoreRef.current =false;
             setHaseMore(false);
 
           }
         }catch(err){  
         }
       }
-      if(pageNumberRef.current !== pageNumber){
+      if(pageNumberRef.current !== pageNumber && haseMoreRef.current){
         getData()
       }
       
@@ -45,13 +46,13 @@ const Tabe=(props) => {
     const onPageClicked =(pages)=>{
       if(pages.isNext){
         
-        console.log("haseMore", firstItemNumber < maxItemsRef.current.length);
-          if(!haseMore){}
-          setFirstItemNumber(haseMore || firstItemNumber < maxItemsRef.current?.length?firstItemNumber+ITEM_IN_PAGE:firstItemNumber)
-        if(firstItemNumber+ITEM_IN_PAGE >= data.length-ITEM_IN_PAGE && haseMore){
+        console.log("haseMore", haseMoreRef.current);
+          setFirstItemNumber(haseMoreRef.current || firstItemNumber < maxItemsRef.current?.length?firstItemNumber+ITEM_IN_PAGE:firstItemNumber)
+        if(firstItemNumber+ITEM_IN_PAGE >= data.length-ITEM_IN_PAGE && haseMoreRef.current){
               console.log("page number is changed",pageNumberRef.current);
               setPageNumber(pageNumber+1);
         }
+        // haseMoreRef.current = firstItemNumber < maxItemsRef.current?.length?true:false;
       }else if(pages.isPrevious&& firstItemNumber > 0){
         setFirstItemNumber(firstItemNumber-(ITEM_IN_PAGE))
       }
