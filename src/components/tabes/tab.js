@@ -11,22 +11,27 @@ import './tab.style.css'
 const Tabe=(props) => {
     const {cropTypeId,catagory}=props;
     const [pageNumber,setPageNumber] =useState(0);
-    const [firstItemNumber,setFirstItemNumber] =useState(1);
+    const [firstItemNumber,setFirstItemNumber] =useState(0);
     const [data,setData] = useState([])
     const [haseMore,setHaseMore] = useState(true)
-    const pageNumberRef = useRef()
+    const [maxItems,setMaxItems] = useState(0);
+    const pageNumberRef = useRef();
+    const haseMoreRef = useRef();
+    const maxItemsRef = useRef([]);
 
       useMemo(()=>{
       const getData = async ()=>{
         try{
           console.log(pageNumber);
-          const data = await (await fetch(`https://apiproxy.agrox.io/api/crops/GetDataForTradeScene?cropTypeId=${cropTypeId}&pageNumber=${pageNumber}`)).json();
-          console.log("data in memo" ,data.data);
-          if(data.data.length){
+          const resData = await (await fetch(`https://apiproxy.agrox.io/api/crops/GetDataForTradeScene?cropTypeId=${cropTypeId}&pageNumber=${pageNumber}`)).json();
+          console.log("resData in memo" ,resData.data.length);
+          if(resData.data.length){
             pageNumberRef.current =pageNumber+1;
-            setData(prev => [...prev,...data.data])
+            setData(prev => [...prev,...resData.data])
+            maxItemsRef.current=[...maxItemsRef.current,...resData.data]
           }else{
             setHaseMore(false);
+
           }
         }catch(err){  
         }
@@ -35,17 +40,20 @@ const Tabe=(props) => {
         getData()
       }
       
-      },[pageNumber,cropTypeId])
+      },[pageNumber, cropTypeId])
 
     const onPageClicked =(pages)=>{
       if(pages.isNext){
-          setFirstItemNumber(haseMore || firstItemNumber < firstItemNumber+ITEM_IN_PAGE?firstItemNumber+ITEM_IN_PAGE-1:firstItemNumber)
+        
+        console.log("haseMore", firstItemNumber < maxItemsRef.current.length);
+          if(!haseMore){}
+          setFirstItemNumber(haseMore || firstItemNumber < maxItemsRef.current?.length?firstItemNumber+ITEM_IN_PAGE:firstItemNumber)
         if(firstItemNumber+ITEM_IN_PAGE >= data.length-ITEM_IN_PAGE && haseMore){
-              console.log("page number is changed");
+              console.log("page number is changed",pageNumberRef.current);
               setPageNumber(pageNumber+1);
         }
       }else if(pages.isPrevious&& firstItemNumber > 0){
-        setFirstItemNumber(firstItemNumber-ITEM_IN_PAGE)
+        setFirstItemNumber(firstItemNumber-(ITEM_IN_PAGE))
       }
       // console.log(pages);
     }
@@ -54,7 +62,7 @@ const Tabe=(props) => {
     <TabeCntainer>
         <TabTitle>{catagory}</TabTitle>
         <Ul>
-            {data ?data.filter((item,index)=>index>=firstItemNumber && index<firstItemNumber+ITEM_IN_PAGE).map((item,index)=>{
+            {data ?data.filter((item,index)=>index>=firstItemNumber && index<=firstItemNumber+ITEM_IN_PAGE).map((item,index)=>{
                   return <Li key={index}><ListItem id={item.subCropId} name={item.cropName} price={item.price}/></Li>
             }): "loading"
         } 
