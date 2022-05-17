@@ -1,0 +1,1 @@
+export const ITEM_IN_PAGE = 10;

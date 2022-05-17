@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const ListItemContainer = styled.div`
 display:flex;
-max-width:300px;
+width:100%;
 max-height:10vh;
 gap:20px;
 `
