@@ -13,11 +13,10 @@ const Tabe=(props) => {
     const [pageNumber,setPageNumber] =useState(0);
     const [firstItemNumber,setFirstItemNumber] =useState(0);
     const [data,setData] = useState([])
-    const [haseMore,setHaseMore] = useState(true)
     const pageNumberRef = useRef();
     const haseMoreRef = useRef(true);
     const maxItemsRef = useRef([]);
-    const firstItemNumberRef = useRef(0);
+
 
       useMemo(()=>{
       const getData = async ()=>{
@@ -31,8 +30,6 @@ const Tabe=(props) => {
             maxItemsRef.current=[...maxItemsRef.current,...resData.data]
           }else{
             haseMoreRef.current =false;
-            setHaseMore(false);
-
           }
         }catch(err){  
         }
@@ -52,7 +49,6 @@ const Tabe=(props) => {
               console.log("page number is changed",pageNumberRef.current);
               setPageNumber(pageNumber+1);
         }
-        // haseMoreRef.current = firstItemNumber < maxItemsRef.current?.length?true:false;
       }else if(pages.isPrevious&& firstItemNumber > 0){
         setFirstItemNumber(firstItemNumber-(ITEM_IN_PAGE))
       }
@@ -72,7 +68,7 @@ const Tabe=(props) => {
         previousLabel={"previous"}
         nextLabel={"next"}
         breakLabel={"..."}
-        pageCount={(data.length/ITEM_IN_PAGE)+1}
+        pageCount={Math.ceil((data.length/ITEM_IN_PAGE)+1)}
         marginPagesDisplayed={3}
         pageRangeDisplayed={3}
         containerClassName={"paginate-container"}
